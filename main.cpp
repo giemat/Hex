@@ -1,48 +1,70 @@
 #include <iostream>
 #include <algorithm>
+#include <sstream>
+#include <vector>
 #include "HexBoard.h"
-
-
-bool isCom(const std::vector<std::string>& vec, const std::string& str) {
-    return std::find(vec.begin(), vec.end(), str) != vec.end();
-}
+using namespace std;
 
 int main() {
     HexBoard hexBoard;
-    std::string size = "BOARD_SIZE";
-    std::string number = "PAWNS_NUMBER";
-    std::string boardCorrect = "IS_BOARD_CORRECT";
-    std::string over = "IS_GAME_OVER";
-    std::string possible = "IS_BOARD_POSSIBLE";
-    std::string naive = "CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT\n"
-                       "CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT\n"
-                       "CAN_RED_WIN_IN_2_MOVES_WITH_NAIVE_OPPONENT\n"
-                       "CAN_BLUE_WIN_IN_2_MOVES_WITH_NAIVE_OPPONENT";
-    std::string perfect = "CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n"
-                          "CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT\n"
-                          "CAN_RED_WIN_IN_2_MOVES_WITH_PERFECT_OPPONENT\n"
-                          "CAN_BLUE_WIN_IN_2_MOVES_WITH_PERFECT_OPPONENT";
-    std::vector<std::string> coms;
-    coms.push_back(size);
-    coms.push_back(number);
-    coms.push_back(boardCorrect);
-    coms.push_back(over);
-    coms.push_back(perfect);
-    coms.push_back(possible);
-    coms.push_back(naive);
+    string input;
+    string Line;
+    while (getline(cin, Line) && !Line.empty()) {
+        switch (hexBoard.whichCom(Line)) {
+            case 0:
+                cout << hexBoard.setBoardSize(input) << endl << endl;
+                //input = "";
+                break;
+            case 1:
+                cout << hexBoard.countBlue(input)+hexBoard.countRed(input) << endl << endl;
+                //input = "";
+                break;
+            case 2:
+                hexBoard.isBoardCorrect(input);
+                //input = "";
+                break;
+            case 4:
+//                try {
+//                    vector<vector<char>> hex_board = hexBoard.hex_to_2d_array(input);
+//                    hexBoard.print_hex_board(hex_board);
+//                } catch (const std::exception& e) {
+//                    std::cerr << "Error: " << e.what() << std::endl;
+//                }
+            case 10:
+                input += Line + "\n";
+                break;
+            }
+        }
+//    std::istringstream iss(input);
+//    std::string line;
+//    std::vector<std::string> lines;
+//
+//    // Extracting lines from the input
+//    while (std::getline(iss, line)) {
+//        size_t firstDash = line.find_first_not_of(' ');
+//        if (firstDash != std::string::npos) {
+//            line.erase(0, firstDash);
+//        }
+//        // Remove unnecessary characters
+//        line.erase(std::remove(line.begin(), line.end(), '-'), line.end());
+//        line.erase(std::remove(line.begin(), line.end(), '<'), line.end());
+//        line.erase(std::remove(line.begin(), line.end(), '>'), line.end());
+//        if (!line.empty()) {
+//            lines.push_back(line);
+//        }
+//    }
+//
+//    // Determine the size of the hex board based on the input
+//    int size = lines.size();
+    std::vector<std::vector<char>> lines;
+    lines = hexBoard.hexParse(input);
 
-    std::string input;
-    std::string line;
-    std::string query;
-    std::cout << "Enter the ASCII representation of the Hex board (Enter an empty line to finish):" << std::endl;
-
-    while (std::getline(std::cin, line) && !line.empty()) {
-        input += line + '\n';
+    for (int i = 0; i < lines.size(); ++i) {
+        for (int j = 0; j < lines.size(); ++j) {
+            cout << lines[i][j];
+        }
+        cout << endl;
     }
+    return 0;
+}
 
-    std::cout << input << std::endl;
-    //hexBoard.fromAsciiRepresentation(input);
-
-    //hexBoard.printBoard();
-        return 0;
-    }

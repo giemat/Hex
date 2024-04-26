@@ -4,100 +4,122 @@
 
 
 #include "HexBoard.h"
-#include <iostream>
-#include <vector>
-#include <sstream>
-#include <algorithm>
 
-HexBoard::HexBoard() {
-    for (auto &row : board) {
-        row.fill('.');
-    }
+
+HexBoard::HexBoard():BOARDSIZE(0),RED(0),BLUE(0) {
+
 }
 
-bool HexBoard::placePiece(char color, int x, int y) {
-    if (isValid(x, y) && board[x][y] == '.') {
-        board[x][y] = color;
-        return true;
-    }
-    return false;
-}
-
-bool HexBoard::checkForWin(char color) {
-    for (auto &row : visited) {
-        row.fill(false);
-    }
-    if (color == 'r') {
-        for (int i = 0; i < BOARD_SIZE; ++i) {
-            if (board[i][0] == color && dfs(i, 0, color)) {
-                return true;
-            }
-        }
-    } else if (color == 'b') {
-        for (int i = 0; i < BOARD_SIZE; ++i) {
-            if (board[0][i] == color && dfs(0, i, color)) {
-                return true;
-            }
+int HexBoard::whichCom(std::string str) const{
+    for (int i = 0; i < coms.size(); ++i) {
+        if (coms[i] == str){
+            return i;
         }
     }
-    return false;
+    return 10;
 }
 
-void HexBoard::printBoard() {
-    for (const auto &row : board) {
-        for (char cell : row) {
-            std::cout << cell << ' ';
-        }
-        std::cout << '\n';
-    }
-}
-
-bool HexBoard::isValid(int x, int y) const {
-    return (x >= 0) && (x < BOARD_SIZE) && (y >= 0) && (y < BOARD_SIZE);
-}
-
-bool HexBoard::dfs(int x, int y, char color) {
-    if ((color == 'r' && y == BOARD_SIZE - 1) || (color == 'b' && x == BOARD_SIZE - 1)) {
-        return true;
-    }
-    visited[x][y] = true;
-    std::array<std::pair<int, int>, 6> directions = {{{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, 1}, {1, -1}}};
-    for (const auto& dir : directions) {
-        int newX = x + dir.first;
-        int newY = y + dir.second;
-        if (isValid(newX, newY) && !visited[newX][newY] && board[newX][newY] == color) {
-            if (dfs(newX, newY, color)) {
-                return true;
-            }
+int HexBoard::countRed(std::string input) {
+    RED = 0;
+    for (char ch : input) {
+        if (ch == 'r'){
+            RED++;
         }
     }
-    return false;
+    return RED;}
+
+int HexBoard::countBlue(std::string input) {
+    BLUE = 0;
+    for (char ch : input) {
+        if (ch == 'b'){
+            BLUE++;
+        }
+    }
+    return BLUE;}
+
+int HexBoard::setBoardSize(std::string input) {
+    BOARDSIZE = 0;
+    for (char ch : input) {
+        if (ch == '<'){
+            BOARDSIZE++;
+        }
+    }
+    BOARDSIZE = sqrt(BOARDSIZE);
+    return int(BOARDSIZE);
 }
 
-void HexBoard::fromAsciiRepresentation(const std::string& asciiBoard) {
-    auto parsedLines = parseAsciiBoard(asciiBoard);
-    for (int i = 0; i < parsedLines.size(); ++i) {
-        for (int j = 0; j < parsedLines[i].size(); ++j) {
-            if (parsedLines[i][j] == 'r' || parsedLines[i][j] == 'b') {
-                placePiece(parsedLines[i][j], i, j);
-            }
-        }
+void HexBoard::isBoardCorrect(std::string input) {
+    if(countRed(input) == countBlue(input) || countRed(input)-1 == countBlue(input)){
+        std::cout << "YES" << std::endl << std::endl;
+    }else{
+        std::cout << "NO" << std::endl << std::endl;
     }
 }
 
-std::vector<std::string> HexBoard::parseAsciiBoard(const std::string& asciiBoard) {
-    std::stringstream ss(asciiBoard);
+std::vector<std::vector<char>> HexBoard::hexParse(const std::string& input) {
+    setBoardSize(input);
+    std::istringstream iss(input);
     std::string line;
-    std::vector<std::string> parsedLines;
+    std::vector<std::string> lines;
 
-    while (getline(ss, line)) {
+    // Extracting lines from the input
+    while (std::getline(iss, line)) {
+        size_t firstDash = line.find_first_not_of(' ');
+        if (firstDash != std::string::npos) {
+            line.erase(0, firstDash);
+        }
+        // Remove unnecessary characters
         line.erase(std::remove(line.begin(), line.end(), '-'), line.end());
         line.erase(std::remove(line.begin(), line.end(), '<'), line.end());
         line.erase(std::remove(line.begin(), line.end(), '>'), line.end());
-        line.erase(std::remove_if(line.begin(), line.end(), ::isspace), line.end());
         if (!line.empty()) {
-            parsedLines.push_back(line);
+            lines.push_back(line);
         }
     }
-    return parsedLines;
+
+    // Determine the size of the hex board based on the input
+    int size = lines.size();
+//    for (int i = 0; i < size; ++i) {
+//        std::replace(lines[i].begin(), lines[i].end(), ' ', '*');
+//        //lines[i].replace(lines[i].begin(),lines[i].end(), ' ', '*');
+//    }
+//    for (int i = 0; i < size; ++i) {
+//        std::cout << lines[i] << std::endl;
+//    }
+    // Create a 2D array with the appropriate size
+    std::vector<std::vector<char>> array(int(BOARDSIZE), std::vector<char>(int(BOARDSIZE), '*'));
+
+    // Map the hex board to the 2D array
+    for (int i = 0; i < BOARDSIZE; ++i) {
+        for (int j = 0; j < BOARDSIZE; ++j) {
+            lines[j].pop_back();
+            array[i][j] = lines[j].back();
+            //std::cout << lines[j].back();
+            for (int k = 0; k < 2; ++k) {
+                lines[j].pop_back();
+            }
+//            array[i][j] = lines[j].back();
+        }
+//        std::cout << std::endl;
+//        for (int i = 0; i < size; ++i) {
+//            std::cout << lines[i] << std::endl;
+//        }
+        lines.erase(lines.begin());
+//        size--;
+//        for (int i = 0; i < size; ++i) {
+//            std::cout << lines[i] << std::endl;
+//        }
+    }
+
+    return array;
+}
+
+
+void HexBoard::print_hex_board(const std::vector<std::vector<char>>& board) {
+    for (const auto& row : board) {
+        for (char cell : row) {
+            std::cout << cell << " ";
+        }
+        std::cout << std::endl;
+    }
 }
