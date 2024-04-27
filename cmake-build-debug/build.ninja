@@ -55,8 +55,8 @@ build CMakeFiles/Hex.dir/main.cpp.obj: CXX_COMPILER__Hex_unscanned_Debug C$:/Use
   OBJECT_DIR = CMakeFiles\Hex.dir
   OBJECT_FILE_DIR = CMakeFiles\Hex.dir
 
-build CMakeFiles/Hex.dir/hex.cpp.obj: CXX_COMPILER__Hex_unscanned_Debug C$:/Users/matgi/CLionProjects/Hex/hex.cpp || cmake_object_order_depends_target_Hex
-  DEP_FILE = CMakeFiles\Hex.dir\hex.cpp.obj.d
+build CMakeFiles/Hex.dir/HexBoard.cpp.obj: CXX_COMPILER__Hex_unscanned_Debug C$:/Users/matgi/CLionProjects/Hex/HexBoard.cpp || cmake_object_order_depends_target_Hex
+  DEP_FILE = CMakeFiles\Hex.dir\HexBoard.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\Hex.dir
   OBJECT_FILE_DIR = CMakeFiles\Hex.dir
@@ -69,7 +69,7 @@ build CMakeFiles/Hex.dir/hex.cpp.obj: CXX_COMPILER__Hex_unscanned_Debug C$:/User
 #############################################
 # Link the executable Hex.exe
 
-build Hex.exe: CXX_EXECUTABLE_LINKER__Hex_Debug CMakeFiles/Hex.dir/main.cpp.obj CMakeFiles/Hex.dir/hex.cpp.obj
+build Hex.exe: CXX_EXECUTABLE_LINKER__Hex_Debug CMakeFiles/Hex.dir/main.cpp.obj CMakeFiles/Hex.dir/HexBoard.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Hex.dir
