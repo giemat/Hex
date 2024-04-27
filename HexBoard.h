@@ -30,15 +30,21 @@ protected:
                          "CAN_BLUE_WIN_IN_2_MOVES_WITH_PERFECT_OPPONENT";
     std::vector<std::string> coms = {"BOARD_SIZE", "PAWNS_NUMBER", "IS_BOARD_CORRECT","IS_BOARD_POSSIBLE", "IS_GAME_OVER", perfect, naive};
 public:
-    HexBoard();
-    int whichCom(std::string str) const;
-    int countRed(std::string input);
-    int countBlue(std::string input);
-    int setBoardSize(std::string input);
-    void isBoardCorrect(std::string input);
-    void print_hex_board(const std::vector<std::vector<char>> &board);
 
+    HexBoard();
+    int whichCom(std::string& input) const;
+    int countRed(std::string& input);
+    int countBlue(std::string& input);
+    int setBoardSize(std::string input);
+    void isBoardCorrect(std::string& input);
+    static void print(const std::vector<std::vector<char>> &board);
     std::vector<std::vector<char>> hexParse(const std::string &input);
+    std::string isOver(std::vector<std::vector<char>> &board);
+    bool dfs(int i, int j, char player, std::vector<std::vector<char>> &board, std::vector<std::vector<bool>> &visited);
+
+    static bool isBoardCorrect(const std::vector<std::vector<char>> &board);
+
+    std::string isPossible(std::vector<std::vector<char>> &board);
 };
 
 #endif //HEX_HEXBOARD_H
