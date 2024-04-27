@@ -19,6 +19,7 @@ protected:
     double BOARDSIZE;
     int RED;
     int BLUE;
+    int SPACES;
     char **BOARD;
     std::string naive ="CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT\n"
                        "CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT\n"
@@ -38,13 +39,19 @@ public:
     int setBoardSize(std::string input);
     void isBoardCorrect(std::string& input);
     static void print(const std::vector<std::vector<char>> &board);
-    std::vector<std::vector<char>> hexParse(const std::string &input);
-    std::string isOver(std::vector<std::vector<char>> &board);
-    bool dfs(int i, int j, char player, std::vector<std::vector<char>> &board, std::vector<std::vector<bool>> &visited);
+    char ** hexParse(const std::string &input);
+    //std::string isOver(std::vector<std::vector<char>> &board);
+    //bool dfs(int i, int j, char player, std::vector<std::vector<char>> &board, std::vector<std::vector<bool>> &visited);
 
-    static bool isBoardCorrect(const std::vector<std::vector<char>> &board);
+    //static bool isBoardCorrect(const std::vector<std::vector<char>> &board);
 
-    std::string isPossible(std::vector<std::vector<char>> &board);
+    std::string isPossible(char **board);
+
+    bool isBoardCorrect(char **board);
+
+    bool dfs(int i, int j, char player, char **board, bool **visited);
+
+    std::string isOver(char **board);
 };
 
 #endif //HEX_HEXBOARD_H
