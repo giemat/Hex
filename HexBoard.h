@@ -33,17 +33,20 @@ protected:
 public:
 
     HexBoard();
-    int whichCom(std::string& input) const;
-    int countRed(std::string& input);
-    int countBlue(std::string& input);
-    int setBoardSize(std::string input);
-    void isBoardCorrect(std::string& input);
-    static void print(const std::vector<std::vector<char>> &board);
-    char ** hexParse(const std::string &input);
-    //std::string isOver(std::vector<std::vector<char>> &board);
-    //bool dfs(int i, int j, char player, std::vector<std::vector<char>> &board, std::vector<std::vector<bool>> &visited);
 
-    //static bool isBoardCorrect(const std::vector<std::vector<char>> &board);
+    int whichCom(std::string& input) const;
+
+    int countRed(std::string& input);
+
+    int countBlue(std::string& input);
+
+    int setBoardSize(std::string input);
+
+    void isBoardCorrect(std::string& input);
+
+    static void print(const std::vector<std::vector<char>> &board);
+
+    char ** hexParse(const std::string &input);
 
     std::string isPossible(char **board);
 
