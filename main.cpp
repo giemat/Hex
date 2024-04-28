@@ -22,13 +22,14 @@ int main() {
                 input = "";
                 break;
             case 3:
-
                 cout << hexBoard.isPossible(hexBoard.hexParse(input)) << endl << endl;
+                hexBoard.deleteBoard(hexBoard.hexParse(input));
                 input = "";
                 break;
             case 4:
 
                 cout << hexBoard.isOver(hexBoard.hexParse(input)) << endl << endl;
+                hexBoard.deleteBoard(hexBoard.hexParse(input));
                 input = "";
                 break;
             case 10:

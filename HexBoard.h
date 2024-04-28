@@ -44,8 +44,6 @@ public:
 
     void isBoardCorrect(std::string& input);
 
-    static void print(const std::vector<std::vector<char>> &board);
-
     char ** hexParse(const std::string &input);
 
     std::string isPossible(char **board);
@@ -55,6 +53,10 @@ public:
     bool dfs(int i, int j, char player, char **board, bool **visited);
 
     std::string isOver(char **board);
+
+    void deleteBoard(char **board);
+
+    void deleteVisit(bool **board) const;
 };
 
 #endif //HEX_HEXBOARD_H

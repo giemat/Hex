@@ -114,15 +114,6 @@ char ** HexBoard::hexParse(const std::string& input) {
     return array;
 }
 
-void HexBoard::print(const std::vector<std::vector<char>>& board) {
-    for (const auto& row : board) {
-        for (char cell : row) {
-            std::cout << cell << " ";
-        }
-        std::cout << std::endl;
-    }
-}
-
 bool HexBoard::dfs(int i, int j, char player, char** board, bool** visited) {
     if (i < 0 || i >= BOARDSIZE || j < 0 || j >= BOARDSIZE || visited[i][j] || board[i][j] != player) {
         return false;
@@ -161,6 +152,8 @@ std::string HexBoard::isOver(char** board) {
 
         for (int i = 0; i < rows; ++i) {
             if (board[i][0] == 'r' && dfs(i, 0, 'r', board, visited)) {
+                deleteVisit(visited);
+                //deleteBoard(board);
                 return "YES RED";
             }
         }
@@ -174,11 +167,16 @@ std::string HexBoard::isOver(char** board) {
 
         for (int j = 0; j < cols; ++j) {
             if (board[0][j] == 'b' && dfs(0, j, 'b', board, visited)) {
+                deleteVisit(visited);
+                //deleteBoard(board);
                 return "YES BLUE";
             }
         }
+        deleteVisit(visited);
+        //deleteBoard(board);
         return "NO";
     }else{
+        //deleteBoard(board);
         return "NO";
     }
 }
@@ -192,6 +190,7 @@ std::string HexBoard::isPossible(char **board) {
                         if (board[i][j] == 'r'){
                             board[i][j] = ' ';
                             if(isOver(board) == "NO"){
+                                //deleteBoard(board);
                                 return "YES";
                             }
                             board[i][j] = 'r';
@@ -206,6 +205,7 @@ std::string HexBoard::isPossible(char **board) {
                         if (board[i][j] == 'b'){
                             board[i][j] = ' ';
                             if(isOver(board) == "NO"){
+                                //deleteBoard(board);
                                 return "YES";
                             }
                             board[i][j] = 'b';
@@ -214,8 +214,28 @@ std::string HexBoard::isPossible(char **board) {
                 }
             }
         }else{
+            //deleteBoard(board);
             return "YES";
         }
     }
+    //deleteBoard(board);
     return "NO";
+}
+
+void HexBoard::deleteVisit(bool **board) const {
+    for (int i = 0; i < BOARDSIZE; ++i) {
+        delete[] board[i];
+    }
+    delete[] board;
+}
+
+void HexBoard::deleteBoard(char **board) {
+    for (int i = 0; i < BOARDSIZE; ++i) {
+        delete[] board[i];
+    }
+    delete[] board;
+    BOARDSIZE = 0;
+    BLUE = 0;
+    RED = 0;
+    SPACES = 0;
 }
