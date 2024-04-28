@@ -9,12 +9,13 @@ int main() {
     string Line;
     while (getline(cin, Line)) {
         switch (hexBoard.whichCom(Line)) {
+            cout << endl;
             case 0:
                 cout << hexBoard.setBoardSize(input) << endl << endl;
                 input = "";
                 break;
             case 1:
-                cout << hexBoard.countBlue(input)+hexBoard.countRed(input) << endl << endl;
+                cout << hexBoard.countBlue(input)+hexBoard.countRed(input) << endl;
                 input = "";
                 break;
             case 2:
@@ -22,17 +23,30 @@ int main() {
                 input = "";
                 break;
             case 3:
-                cout << hexBoard.isPossible(hexBoard.hexParse(input)) << endl << endl;
+                cout << hexBoard.isPossible(hexBoard.hexParse(input)) << endl;
                 hexBoard.deleteBoard(hexBoard.hexParse(input));
                 input = "";
                 break;
             case 4:
 
-                cout << hexBoard.isOver(hexBoard.hexParse(input)) << endl << endl;
+                cout << hexBoard.isOver(hexBoard.hexParse(input)) << endl;
                 hexBoard.deleteBoard(hexBoard.hexParse(input));
                 input = "";
                 break;
-            case 10:
+                case 5:
+                cout << hexBoard.Naive(hexBoard.hexParse(input), 'r', 1) << endl;
+                break;
+                case 6:
+                cout << hexBoard.Naive(hexBoard.hexParse(input), 'b', 1) << endl;
+                break;
+                case 7:
+                cout << hexBoard.Naive(hexBoard.hexParse(input), 'r', 2) << endl;
+                break;
+                case 8:
+                cout << hexBoard.Naive(hexBoard.hexParse(input), 'b', 2) << endl;
+                hexBoard.deleteBoard(hexBoard.hexParse(input));
+                break;
+            case 20:
                 input += Line + "\n";
                 break;
         }

@@ -15,7 +15,7 @@ int HexBoard::whichCom(std::string& input) const{
             return i;
         }
     }
-    return 10;
+    return 20;
 }
 
 int HexBoard::countRed(std::string& input) {
@@ -153,7 +153,6 @@ std::string HexBoard::isOver(char** board) {
         for (int i = 0; i < rows; ++i) {
             if (board[i][0] == 'r' && dfs(i, 0, 'r', board, visited)) {
                 deleteVisit(visited);
-                //deleteBoard(board);
                 return "YES RED";
             }
         }
@@ -238,4 +237,89 @@ void HexBoard::deleteBoard(char **board) {
     BLUE = 0;
     RED = 0;
     SPACES = 0;
+}
+
+std::string HexBoard::Naive(char** board, char player, int moves) {
+    if (isPossible(board) == "NO"){
+        return "NO";//for all
+    }
+    if (isOver(board) != "NO"){
+        return "NO";//for all
+    }
+    if (RED-1 == BLUE){//blue turn
+        if (player == 'b'){
+            if (moves == 1){
+                if(SPACES < 1){
+                    return "NO";
+                }
+                for (int i = 0; i < BOARDSIZE; ++i) {
+                    for (int j = 0; j < BOARDSIZE; ++j) {
+                        if (board[i][j] == ' '){
+                            board[i][j] = 'b';
+                            if (isOver(board) == "YES BLUE"){
+                                return "YES";
+                            }
+                            board[i][j] = ' ';
+                        }
+                    }
+                }
+            }
+        }else{
+            if (moves == 1){
+                if(SPACES < 2){
+                    return "NO";
+                }
+                for (int i = 0; i < BOARDSIZE; ++i) {
+                    for (int j = 0; j < BOARDSIZE; ++j) {
+                        if (board[i][j] == ' '){
+                            board[i][j] = 'r';
+                            if (isOver(board) == "YES RED"){
+                                return "YES";
+                            }
+                            board[i][j] = ' ';
+                        }
+                    }
+                }
+            }
+        }
+    } else{//red turn
+        if (player == 'b'){
+            if (moves == 1){
+                if(SPACES < 2){
+                    return "NO";
+                }
+                for (int i = 0; i < BOARDSIZE; ++i) {
+                    for (int j = 0; j < BOARDSIZE; ++j) {
+                        if (board[i][j] == ' '){
+                            board[i][j] = 'b';
+                            if (isOver(board) == "YES BLUE"){
+                                return "YES";
+                            }
+                            board[i][j] = ' ';
+                        }
+                    }
+                }
+            }
+        }else{
+            if (moves == 1){
+                if(SPACES < 1){
+                    return "NO";
+                }
+                for (int i = 0; i < BOARDSIZE; ++i) {
+                    for (int j = 0; j < BOARDSIZE; ++j) {
+                        if (board[i][j] == ' '){
+                            board[i][j] = 'r';
+                            if (isOver(board) == "YES RED"){
+                                return "YES";
+                            }
+                            board[i][j] = ' ';
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    return "NO";//not needed
 }
