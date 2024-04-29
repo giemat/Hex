@@ -51,6 +51,12 @@ public:
     void deleteVisit(bool **board) const;
 
     std::string Naive(char **board, char player, int moves);
+
+    bool isConnected(char player, char **board);
+
+    bool iterate(char **board, char player);
+
+    bool testTwo(char **board, char player);
 };
 
 #endif //HEX_HEXBOARD_H

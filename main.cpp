@@ -9,42 +9,53 @@ int main() {
     string Line;
     while (getline(cin, Line)) {
         switch (hexBoard.whichCom(Line)) {
-            cout << endl;
             case 0:
-                cout << hexBoard.setBoardSize(input) << endl << endl;
+                cout << endl;
+                cout << hexBoard.setBoardSize(input) << endl;
                 input = "";
                 break;
             case 1:
+                cout << endl;
                 cout << hexBoard.countBlue(input)+hexBoard.countRed(input) << endl;
                 input = "";
                 break;
             case 2:
+                cout << endl;
                 hexBoard.isBoardCorrect(input);
                 input = "";
                 break;
             case 3:
+                cout << endl;
                 cout << hexBoard.isPossible(hexBoard.hexParse(input)) << endl;
                 hexBoard.deleteBoard(hexBoard.hexParse(input));
                 input = "";
                 break;
             case 4:
-
+                cout << endl;
                 cout << hexBoard.isOver(hexBoard.hexParse(input)) << endl;
                 hexBoard.deleteBoard(hexBoard.hexParse(input));
                 input = "";
                 break;
                 case 5:
-                cout << hexBoard.Naive(hexBoard.hexParse(input), 'r', 1) << endl;
+                    cout << endl;
+                    cout << hexBoard.Naive(hexBoard.hexParse(input), 'r', 1) << endl;
+                hexBoard.deleteBoard(hexBoard.hexParse(input));
+
                 break;
                 case 6:
-                cout << hexBoard.Naive(hexBoard.hexParse(input), 'b', 1) << endl;
+                    cout << hexBoard.Naive(hexBoard.hexParse(input), 'b', 1) << endl;
+                hexBoard.deleteBoard(hexBoard.hexParse(input));
+
                 break;
                 case 7:
-                cout << hexBoard.Naive(hexBoard.hexParse(input), 'r', 2) << endl;
+                    cout << hexBoard.Naive(hexBoard.hexParse(input), 'r', 2) << endl;
+                hexBoard.deleteBoard(hexBoard.hexParse(input));
+
                 break;
                 case 8:
-                cout << hexBoard.Naive(hexBoard.hexParse(input), 'b', 2) << endl;
-                hexBoard.deleteBoard(hexBoard.hexParse(input));
+                    cout << hexBoard.Naive(hexBoard.hexParse(input), 'b', 2) << endl;
+                    hexBoard.deleteBoard(hexBoard.hexParse(input));
+                input = "";
                 break;
             case 20:
                 input += Line + "\n";
