@@ -20,7 +20,7 @@ protected:
     int RED;
     int BLUE;
     int SPACES;
-    char **BOARD;
+    char board[11][11];
     std::vector<std::string> coms = {"BOARD_SIZE", "PAWNS_NUMBER", "IS_BOARD_CORRECT","IS_BOARD_POSSIBLE", "IS_GAME_OVER", "CAN_RED_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT", "CAN_BLUE_WIN_IN_1_MOVE_WITH_NAIVE_OPPONENT", "CAN_RED_WIN_IN_2_MOVES_WITH_NAIVE_OPPONENT", "CAN_BLUE_WIN_IN_2_MOVES_WITH_NAIVE_OPPONENT", "CAN_RED_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT", "CAN_BLUE_WIN_IN_1_MOVE_WITH_PERFECT_OPPONENT", "CAN_RED_WIN_IN_2_MOVES_WITH_PERFECT_OPPONENT", "CAN_BLUE_WIN_IN_2_MOVES_WITH_PERFECT_OPPONENT"};
 public:
 
@@ -36,27 +36,27 @@ public:
 
     void isBoardCorrect(std::string& input);
 
-    char ** hexParse(const std::string &input);
+    void hexParse(const std::string &input);
 
-    std::string isPossible(char **board);
+    std::string isPossible();
 
-    bool isBoardCorrect(char **board);
+    bool isBoardCorrect();
 
-    bool dfs(int i, int j, char player, char **board, bool **visited);
+    bool dfs(int i, int j, char player, bool **visited);
 
-    std::string isOver(char **board);
+    std::string isOver();
 
-    void deleteBoard(char **board);
+    void deleteBoard();
 
     void deleteVisit(bool **board) const;
 
-    std::string Naive(char **board, char player, int moves);
+    std::string Naive(char player, int moves);
 
-    bool isConnected(char player, char **board);
+    bool isConnected(char player);
 
-    bool iterate(char **board, char player);
+    bool iterate( char player);
 
-    bool testTwo(char **board, char player);
+    bool testTwo( char player);
 };
 
 #endif //HEX_HEXBOARD_H
