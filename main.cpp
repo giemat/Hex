@@ -3,17 +3,6 @@
 #include "HexBoard.h"
 using namespace std;
 
-int setBoardSize(std::string input) {
-    int BOARDSIZE = 0;
-    for (char ch : input) {
-        if (ch == '<'){
-            BOARDSIZE++;
-        }
-    }
-    BOARDSIZE = sqrt(BOARDSIZE);
-    return int(BOARDSIZE);
-}
-
 int whichCom(string& input, std::vector<std::string> coms){
     for (int i = 0; i < coms.size(); ++i) {
         if (coms[i] == input){
@@ -60,30 +49,50 @@ int main() {
                 hexBoard.deleteBoard();
                 input = "";
                 break;
-                case 5:
-                    cout << endl;
+            case 5:
+                cout << endl;
                 hexBoard.hexParse(input);
-                    cout << hexBoard.Naive('r', 1) << endl;
-                hexBoard.deleteBoard();
-
+                cout << hexBoard.Naive('r', 1) << endl;
+                //hexBoard.deleteBoard();
                 break;
-                case 6:
-                    hexBoard.hexParse(input);
-                    cout << hexBoard.Naive( 'b', 1) << endl;
-                hexBoard.deleteBoard();
-
+            case 6:
+                //hexBoard.hexParse(input);
+                cout << hexBoard.Naive( 'b', 1) << endl;
+                //hexBoard.deleteBoard();
                 break;
-                case 7:
-                    hexBoard.hexParse(input);
-                    cout << hexBoard.Naive( 'r', 2) << endl;
-                hexBoard.deleteBoard();
-
+            case 7:
+                //hexBoard.hexParse(input);
+                cout << hexBoard.Naive( 'r', 2) << endl;
+                //hexBoard.deleteBoard();
                 break;
-                case 8:
-                    hexBoard.hexParse(input);
-                    cout << hexBoard.Naive( 'b', 2) << endl;
-                    hexBoard.deleteBoard();
+            case 8:
+                //hexBoard.hexParse(input);
+                cout << hexBoard.Naive( 'b', 2) << endl;
+                hexBoard.deleteBoard();
                 input = "";
+                break;
+            case 9:
+                cout << endl;
+                hexBoard.hexParse(input);
+                cout << hexBoard.Perfect('r','b', 1) << endl;
+                //hexBoard.deleteBoard();
+                break;
+            case 10:
+                //hexBoard.hexParse(input);
+                cout << hexBoard.Perfect('b','r', 1) << endl;
+                //hexBoard.deleteBoard();
+                break;
+            case 11:
+                //hexBoard.hexParse(input);
+                cout << hexBoard.Perfect('r','b', 2) << endl;
+                //hexBoard.deleteBoard();
+                break;
+            case 12:
+                //hexBoard.hexParse(input);
+                cout << hexBoard.Perfect('b','r', 2) << endl;
+                hexBoard.deleteBoard();
+                input = "";
+                hexBoard.setLast("");
                 break;
             case 20:
                 input += Line + "\n";

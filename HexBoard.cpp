@@ -5,18 +5,15 @@
 
 #include "HexBoard.h"
 
+#include <utility>
+
 
 HexBoard::HexBoard():BOARDSIZE(0),RED(0),BLUE(0), SPACES(0) {
-
-}
-
-int HexBoard::whichCom(std::string& input) const{
-    for (int i = 0; i < coms.size(); ++i) {
-        if (coms[i] == input){
-            return i;
+    for (auto & i : board) {
+        for (char & j : i) {
+            j = ' ';
         }
     }
-    return 20;
 }
 
 int HexBoard::countRed(std::string& input) {
@@ -37,7 +34,7 @@ int HexBoard::countBlue(std::string& input) {
     }
     return BLUE;}
 
-int HexBoard::setBoardSize(std::string input) {
+int HexBoard::setBoardSize(const std::string& input) {
     BOARDSIZE = 0;
     for (char ch : input) {
         if (ch == '<'){
@@ -56,25 +53,8 @@ void HexBoard::isBoardCorrect(std::string& input) {
     }
 }
 
-bool HexBoard::isBoardCorrect() {
-    int red = 0;
-    int blue = 0;
-    int space = 0;
-    for (int i = 0; i < BOARDSIZE; ++i) {
-        for (int j = 0; j < BOARDSIZE; ++j){
-            if (board[i][j] == 'r'){
-                red++;
-            } else if(board[i][j] == 'b'){
-                blue++;
-            }else{
-                space++;
-            }
-        }
-    }
-    RED = red;
-    BLUE = blue;
-    SPACES = space;
-    return (red == blue || red-1 == blue);
+bool HexBoard::isBoardCorrect() const {
+    return (RED == BLUE || RED-1 == BLUE);
 }
 
 void HexBoard::hexParse(const std::string& input) {
@@ -100,6 +80,18 @@ void HexBoard::hexParse(const std::string& input) {
         for (int j = 0; j < BOARDSIZE; ++j) {
             lines[j].pop_back();
             board[i][j] = lines[j].back();
+            switch (lines[j].back()) {
+                case 'r':
+                    RED++;
+                    break;
+                case 'b':
+                    BLUE++;
+                    break;
+                default:
+                    SPACES++;
+                    break;
+
+            }
             lines[j].pop_back();
             lines[j].pop_back();
 
@@ -136,8 +128,8 @@ bool HexBoard::dfs(int i, int j, char player, bool** visited) {
 }
 
 bool HexBoard::isConnected(char player) {
-    int cols = BOARDSIZE;
-    int rows = BOARDSIZE;
+    int cols = int(BOARDSIZE);
+    int rows = int(BOARDSIZE);
     bool** visited = new bool*[rows];
     for (int i = 0; i < rows; i++) {
         visited[i] = new bool[cols]{};
@@ -165,7 +157,7 @@ bool HexBoard::isConnected(char player) {
 
 std::string HexBoard::isOver() {
     if (isBoardCorrect()){
-        int rows = BOARDSIZE;
+        int rows = int(BOARDSIZE);
         int cols = rows;
 
         bool** visited = new bool*[rows];
@@ -246,11 +238,11 @@ std::string HexBoard::isPossible() {
     return "NO";
 }
 
-void HexBoard::deleteVisit(bool **board) const {
+void HexBoard::deleteVisit(bool **visited) const {
     for (int i = 0; i < BOARDSIZE; ++i) {
-        delete[] board[i];
+        delete[] visited[i];
     }
-    delete[] board;
+    delete[] visited;
 }
 
 void HexBoard::deleteBoard() {
@@ -271,6 +263,7 @@ bool HexBoard::iterate( char player){
             if (board[i][j] == ' '){
                 board[i][j] = player;
                 if (isConnected(player)){
+                    board[i][j] = ' ';
                     return true;
                 }
                 board[i][j] = ' ';
@@ -301,6 +294,7 @@ bool HexBoard::testTwo( char player){
                                     board[i][j] = ' ';
                                     return true;
                                 }
+                                board[i][j] = ' ';
                                 //return false;
                             }
                             board[k][l] = ' ';
@@ -398,3 +392,236 @@ std::string HexBoard::Naive( char player, int moves) {
     return "NO";//not needed
 }
 
+bool HexBoard::perfectPair(char player, char enemy) {
+    for (int i = 0; i < BOARDSIZE; ++i) {
+        for (int j = 0; j < BOARDSIZE; ++j) {
+            if (board[i][j] == ' ') {
+                board[i][j] = player;
+                if (isConnected(player)) {
+                    board[i][j] = enemy;
+                    if (!isConnected(enemy)) {
+                        for (int k = 0; k < BOARDSIZE; ++k) {
+                            for (int l = 0; l < BOARDSIZE; ++l) {
+                                if (board[k][l] == ' ' && !(k == i && l == j)) {
+                                    board[k][l] = player;
+                                    if (isConnected(player)) {
+                                        board[i][j] = ' ';
+                                        board[k][l] = ' ';
+                                        return true;
+                                    }
+                                    board[k][l] = ' ';
+                                }
+                            }
+                        }
+                    }else{
+                        board[i][j] = ' ';
+                        return false;
+                    }
+                }
+                board[i][j] = ' ';
+            }
+        }
+    }
+    return false;
+}
+
+bool HexBoard::perfectTriple(char player, char enemy, int moves){
+    for (int i = 0; i < BOARDSIZE; ++i) {
+        for (int j = 0; j < BOARDSIZE; ++j) {
+            if (board[i][j] == ' '){
+                board[i][j] = player;
+                if (isConnected(player)){
+                    board[i][j] = ' ';
+                    last = "NO";
+                    return false;
+                }
+
+                if (j < BOARDSIZE || i < BOARDSIZE){
+                    if(perfectPair(player, enemy)){
+                        board[i][j] = ' ';
+                        last = "YES";
+                        return true;
+                    }
+                    else{
+                        board[i][j] = ' ';
+//                        last = "NO";
+//                        return false;
+                    }
+                }else{
+                    board[i][j] = ' ';
+                    last = "NO";
+                    return false;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+std::string HexBoard::Perfect(char player, char enemy,int moves) {
+    if (isPossible() == "NO") {
+        return "NO";//for all
+    }
+    if (isOver() != "NO") {
+        return "NO";//for all
+    }
+    if (last == "YES") {
+        last = "NO";
+        return "NO";
+    }
+    if (moves == 1) {
+        if (RED == BLUE) {//red turn
+            if (player == 'r') {//red win in 1 move
+                if (SPACES < 1) {
+                    last = "NO";
+                    return "NO";
+                }
+                for (int i = 0; i < BOARDSIZE; ++i) {
+                    for (int j = 0; j < BOARDSIZE; ++j) {
+                        if (board[i][j] == ' ') {
+                            board[i][j] = player;
+                            if (isConnected(player)) {
+                                board[i][j] = ' ';
+                                last = "YES";
+                                return "YES";
+                            }
+                            board[i][j] = ' ';
+                        }
+                    }
+                }
+            } else {//blue win in 1 move
+                if (SPACES < 2) {
+                    last = "NO";
+                    return "NO";
+                }
+                if (perfectPair(player, enemy)) {
+                    last = "YES";
+                    return "YES";
+                } else {
+                    last = "NO";
+                    return "NO";
+                }
+            }
+        } else {//blue turn
+            if (player == 'b') {//blue win in 1 move
+                if (SPACES < 1) {
+                    last = "NO";
+                    return "NO";
+                }
+                for (int i = 0; i < BOARDSIZE; ++i) {
+                    for (int j = 0; j < BOARDSIZE; ++j) {
+                        if (board[i][j] == ' ') {
+                            board[i][j] = player;
+                            if (isConnected(player)) {
+                                board[i][j] = ' ';
+                                last = "YES";
+                                return "YES";
+                            }
+                            board[i][j] = ' ';
+                        }
+                    }
+                }
+            } else {//red win in 1 move
+                if (SPACES < 2) {
+                    last = "NO";
+                    return "NO";
+                }
+                if (perfectPair(player, enemy)) {
+                    last = "YES";
+                    return "YES";
+                } else {
+                    last = "NO";
+                    return "NO";
+                }
+            }
+        }
+    } else {//2 moves
+        if (RED == BLUE) {//red turn
+            if (player == 'r') {//red win in 2 moves
+                if (SPACES < 3) {
+                    last = "NO";
+                    return "NO";
+                }
+                if (perfectTriple(player, enemy, moves)) {
+                    last = "YES";
+                    return "YES";
+                }
+                else {
+                    last = "NO";
+                    return "NO";
+                }
+            } else {//blue win in 2 moves
+                if (SPACES < 4) {
+                    last = "NO";
+                    return "NO";
+                }
+                for (int i = 0; i < BOARDSIZE; ++i) {
+                    for (int j = 0; j < BOARDSIZE; ++j) {
+                        if (board[i][j] == ' ') {
+                            board[i][j] = player;
+                            if (isConnected(player)) {
+                                board[i][j] = enemy;
+                                if (perfectTriple(player, enemy, moves)) {
+                                    board[i][j] = ' ';
+                                    last = "YES";
+                                    return "YES";
+                                } else {
+                                    board[i][j] = ' ';
+                                    last = "NO";
+                                    return "NO";
+                                }
+                            }
+                            board[i][j] = ' ';
+                        }
+                    }
+                }
+            }
+        } else {//blue turn
+            if (player == 'b') {//can blue win in 2 moves
+                if (SPACES < 3) {
+                    last = "NO";
+                    return "NO";
+                }
+                if (perfectTriple(player, enemy, moves)) {
+                    last = "YES";
+                    return "YES";
+                } else{
+                    last = "NO";
+                    return "NO";
+                }
+                } else {//can red win in 2 moves
+                    if (SPACES < 4) {
+                        last = "NO";
+                        return "NO";
+                    }
+                    for (int i = 0; i < BOARDSIZE; ++i) {
+                    for (int j = 0; j < BOARDSIZE; ++j) {
+                        if (board[i][j] == ' ') {
+                            board[i][j] = player;
+                            if (isConnected(player)) {
+                                board[i][j] = enemy;
+                                if (perfectTriple(player, enemy, moves)) {
+                                    board[i][j] = ' ';
+                                    last = "YES";
+                                    return "YES";
+                                }
+                                else {
+                                    board[i][j] = ' ';
+                                    last = "NO";
+                                    return "NO";
+                                }
+                            }
+                            board[i][j] = ' ';
+                        }
+                    }
+                }
+            }
+        }
+    }//2 moves end
+    last = "NO";
+    return "NO";
+}
+void HexBoard::setLast(std::string input) {
+    last = std::move(input);
+}
